@@ -1,22 +1,28 @@
 import {StyleSheet} from 'react-native';
+import Flex from '../../../examples/ex06-style-flex';
+
+let paddingDefault = 5;
+let fontSizeBig = 36;
+let fontSizeMedium = 24;
+let fontSizeSmall = 18;
 
 export const styles = StyleSheet.create({
-  // Container styles
+  // Layout styles
   container: {
     flexDirection: 'column',
     flex: 1,
     backgroundColor: 'black',
   },
-
-  // Layout styles
   header: {
     backgroundColor: 'blue',
-    fontSize: 24,
+    fontSize: fontSizeBig,
     color: 'white',
   },
   image: {
-    backgroundColor: 'purple',
+    height: 200,
+    justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'purple',
   },
   content: {
     backgroundColor: 'red',
@@ -28,32 +34,44 @@ export const styles = StyleSheet.create({
     flexWrap: 'nowrap',
   },
   adBanner: {
+    flexDirection: 'row',
     backgroundColor: 'yellow',
     height: 100,
+    justifyContent: 'center',
   },
   footer: {
-    flexDirection: 'row-reverse',
+    paddingHorizontal: paddingDefault,
+    flexDirection: 'row',
     backgroundColor: 'green',
     justifyContent: 'space-between',
   },
 
   //Component styles
-  button: {
+  mainButton: {
     backgroundColor: 'gray',
     height: '100%',
+  },
+  imageButtonConfig: {
+    height: 50,
+    width: 50,
+    resizeMode: 'contain',
   },
 
   // Text styles
   textTitle: {
     color: 'white',
-    fontSize: 36,
+    fontSize: fontSizeBig,
   },
   textContent: {
     color: 'white',
-    fontSize: 24,
+    fontSize: fontSizeMedium,
   },
   textOption: {
     color: 'white',
-    fontSize: 24,
+    fontSize: fontSizeMedium,
+  },
+  textAdBanner: {
+    color: 'white',
+    fontSize: fontSizeSmall,
   },
 });

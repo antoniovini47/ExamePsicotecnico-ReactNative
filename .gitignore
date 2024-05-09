@@ -76,5 +76,5 @@ android/app/keyStoreVigente.jks
 android/gradle.properties
 
 # Database
-/src/database
+/src/database/images
 /examples
