@@ -34,8 +34,7 @@ export const styles = StyleSheet.create({
     flexWrap: 'nowrap',
   },
   adBanner: {
-    flexDirection: 'row',
-    backgroundColor: 'yellow',
+    backgroundColor: 'black',
     height: 100,
     justifyContent: 'center',
   },
@@ -71,7 +70,8 @@ export const styles = StyleSheet.create({
     fontSize: fontSizeMedium,
   },
   textAdBanner: {
-    color: 'white',
+    color: 'gray-900',
     fontSize: fontSizeSmall,
+    textAlign: 'center',
   },
 });

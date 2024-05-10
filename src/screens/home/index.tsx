@@ -31,7 +31,7 @@ function sortingQuestions(quantity: number) {
 
 export function Home() {
   const [textButton, setTextButton] = React.useState('Iniciar');
-  const [textTitle, setTextTitle] = React.useState('Nome do App');
+  const [textTitle, setTextTitle] = React.useState('Exame Psicotécnico');
   const [image, setImagePath] = React.useState(
     require('../../../android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png'),
   );
@@ -63,7 +63,7 @@ export function Home() {
 
   console.log(`Rendered: ${++renderCount}`);
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.textTitle}>{textTitle}</Text>
       </View>
@@ -112,7 +112,10 @@ export function Home() {
         </ScrollView>
       </View>
       <View style={styles.adBanner}>
-        <Text style={styles.textAdBanner}>Ad Banner</Text>
+        <Text style={styles.textAdBanner}>
+          Carregando anúncios. Para remover anúncios clique no botão de
+          configurações.
+        </Text>
       </View>
 
       <View style={styles.footer}>
@@ -130,6 +133,6 @@ export function Home() {
           <Text style={styles.textTitle}>{textButton}</Text>
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
