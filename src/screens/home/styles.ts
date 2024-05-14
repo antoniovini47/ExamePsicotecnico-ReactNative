@@ -1,77 +1,98 @@
-import {StyleSheet} from 'react-native';
-import Flex from '../../../examples/ex06-style-flex';
+import {StyleSheet, Dimensions} from 'react-native';
 
-let paddingDefault = 5;
-let fontSizeBig = 36;
-let fontSizeMedium = 24;
-let fontSizeSmall = 18;
+const paddingDefault = 10;
+const paddingSmall = 5;
+
+const fontSizeBig = 36;
+const fontSizeMedium = 24;
+const fontSizeSmall = 18;
+
+const backgroundColor = 'black';
+const textColor = 'white';
+
+const adHeight = 50; //Alterar com base na documentação AdMob
+const buttonHeight = 50;
+const screenWidth = Dimensions.get('screen').width;
 
 export const styles = StyleSheet.create({
   // Layout styles
   container: {
     flexDirection: 'column',
     flex: 1,
-    backgroundColor: 'black',
+    backgroundColor: backgroundColor,
   },
   header: {
-    backgroundColor: 'blue',
     fontSize: fontSizeBig,
-    color: 'white',
+    color: textColor,
   },
   image: {
-    height: 200,
-    justifyContent: 'center',
+    width: screenWidth,
+    height: (9 / 16) * screenWidth,
     alignItems: 'center',
-    backgroundColor: 'purple',
+    justifyContent: 'center',
+    resizeMode: 'contain',
   },
   content: {
-    backgroundColor: 'red',
     flex: 5,
+    padding: paddingDefault,
   },
   radioButton: {
-    backgroundColor: 'orange',
+    paddingTop: paddingSmall,
     flexDirection: 'row',
     flexWrap: 'nowrap',
   },
   adBanner: {
-    backgroundColor: 'black',
-    height: 100,
+    height: adHeight,
     justifyContent: 'center',
   },
   footer: {
     paddingHorizontal: paddingDefault,
     flexDirection: 'row',
-    backgroundColor: 'green',
     justifyContent: 'space-between',
   },
 
   //Component styles
   mainButton: {
-    backgroundColor: 'gray',
-    height: '100%',
+    backgroundColor: textColor,
+    height: buttonHeight,
+    paddingLeft: paddingSmall,
+    paddingRight: paddingSmall,
   },
   imageButtonConfig: {
-    height: 50,
-    width: 50,
+    height: buttonHeight,
+    width: buttonHeight,
     resizeMode: 'contain',
+  },
+  slider: {
+    backgroundColor: textColor,
+    paddingTop: paddingDefault,
+    height: buttonHeight,
   },
 
   // Text styles
   textTitle: {
-    color: 'white',
+    color: textColor,
     fontSize: fontSizeBig,
+    textAlign: 'center',
   },
   textContent: {
-    color: 'white',
+    color: textColor,
     fontSize: fontSizeMedium,
+    textAlign: 'center',
+    paddingBottom: paddingDefault,
   },
   textOption: {
-    color: 'white',
-    fontSize: fontSizeMedium,
+    color: textColor,
+    fontSize: fontSizeSmall,
   },
   textAdBanner: {
-    color: 'gray-900',
+    color: 'darkgray',
     fontSize: fontSizeSmall,
+    textAlign: 'center',
+  },
+  textButton: {
+    color: backgroundColor,
+    fontSize: fontSizeBig,
     textAlign: 'center',
   },
 });

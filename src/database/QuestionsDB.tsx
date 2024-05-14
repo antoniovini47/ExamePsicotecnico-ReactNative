@@ -1,13 +1,13 @@
 import {Question} from '../class/Question';
 
-const imageDefault: string =
+const imageDefaultPath: string =
   '../../android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png';
 
 const questionsDB: Question[] = [
   {
     id: 1,
     image: require('./images/01d.png'),
-    textTitle: 'Marque a opção diferente das demais',
+    textQuestion: 'Marque a opção diferente das demais',
     textOptionA: 'Pato A',
     textOptionB: 'Pato B',
     textOptionC: 'Pato C',
@@ -17,8 +17,8 @@ const questionsDB: Question[] = [
   },
   {
     id: 2,
-    image: require(imageDefault),
-    textTitle: 'Complete a sequência: 21 35 20 34 19 33 18 ??',
+    image: require(imageDefaultPath),
+    textQuestion: 'Complete a sequência: 21 35 20 34 19 33 18 ??',
     textOptionA: '32',
     textOptionB: '18',
     textOptionC: '40',
@@ -29,7 +29,7 @@ const questionsDB: Question[] = [
   {
     id: 3,
     image: require('./images/03b.png'),
-    textTitle: 'Qual a resposta correta?',
+    textQuestion: 'Qual a resposta correta?',
     textOptionA: '6',
     textOptionB: '7',
     textOptionC: '8',
@@ -39,8 +39,8 @@ const questionsDB: Question[] = [
   },
   {
     id: 4,
-    image: require(imageDefault),
-    textTitle: 'Tem-se nove velas acesas, e se apagam 3. Quantas ficam?',
+    image: require(imageDefaultPath),
+    textQuestion: 'Tem-se nove velas acesas, e se apagam 3. Quantas ficam?',
     textOptionA: '48 / 4',
     textOptionB: '8 + 1',
     textOptionC: 'dois ao cubo',
@@ -50,8 +50,8 @@ const questionsDB: Question[] = [
   },
   {
     id: 5,
-    image: require(imageDefault),
-    textTitle:
+    image: require(imageDefaultPath),
+    textQuestion:
       'RELACIONE\n1) acender      ( ? ) riso\n2) pranto     ( ? ) apagar\n3) modéstia     ( ? ) orgulho',
     textOptionA: '213',
     textOptionB: '123',
@@ -62,8 +62,8 @@ const questionsDB: Question[] = [
   },
   {
     id: 6,
-    image: require(imageDefault),
-    textTitle:
+    image: require(imageDefaultPath),
+    textQuestion:
       'Numa sala, de nove cantos, há uma pessoa em cada canto. Quantas pessoas cada uma vê?',
     textOptionA: '10',
     textOptionB: '8',
@@ -75,7 +75,7 @@ const questionsDB: Question[] = [
   {
     id: 7,
     image: require('./images/07b.png'),
-    textTitle: 'Qual a alternativa correta?',
+    textQuestion: 'Qual a alternativa correta?',
     textOptionA: 'Alternativa A',
     textOptionB: 'Alternativa B',
     textOptionC: 'Alternativa C',
@@ -85,8 +85,8 @@ const questionsDB: Question[] = [
   },
   {
     id: 8,
-    image: require(imageDefault),
-    textTitle:
+    image: require(imageDefaultPath),
+    textQuestion:
       'O rato roeu a roupa da rainha. O rei, revoltado, matou o rato. Quantos erres tem "isso"?',
     textOptionA: 'Um número negativo',
     textOptionB: '3 x 6 : 2',
@@ -97,8 +97,8 @@ const questionsDB: Question[] = [
   },
   {
     id: 9,
-    image: require(imageDefault),
-    textTitle: 'DRAMA',
+    image: require(imageDefaultPath),
+    textQuestion: 'DRAMA',
     textOptionA: 'dente, rouca, além, algo, diabo',
     textOptionB: 'droga, rapaz, aranha, manga, abacate',
     textOptionC: 'dragão, quartel, arma, marcial, ajudante',
@@ -108,8 +108,8 @@ const questionsDB: Question[] = [
   },
   {
     id: 10,
-    image: require(imageDefault),
-    textTitle: 'Que se passa aqui?',
+    image: require(imageDefaultPath),
+    textQuestion: 'Que se passa aqui?',
     textOptionA: 'mecamitomecamitomecamito',
     textOptionB: 'fitatifofitatifofitatifo',
     textOptionC: 'notanatonotanatonotanota',
@@ -120,7 +120,7 @@ const questionsDB: Question[] = [
   {
     id: 11,
     image: require('./images/11e.png'),
-    textTitle: 'Qual figura não pertence ao grupo?',
+    textQuestion: 'Qual figura não pertence ao grupo?',
     textOptionA: 'Imagem A',
     textOptionB: 'Imagem B',
     textOptionC: 'Imagem C',
@@ -130,8 +130,8 @@ const questionsDB: Question[] = [
   },
   {
     id: 12,
-    image: require(imageDefault),
-    textTitle: 'Qual destas perguntas é impossível responder "sim"?',
+    image: require(imageDefaultPath),
+    textQuestion: 'Qual destas perguntas é impossível responder "sim"?',
     textOptionA: 'está dormindo?',
     textOptionB: 'sonhou?',
     textOptionC: 'machucou-se',
@@ -141,8 +141,8 @@ const questionsDB: Question[] = [
   },
   {
     id: 13,
-    image: require(imageDefault),
-    textTitle: 'TEMP -- TEMPES -- TEMPESTA -- ?',
+    image: require(imageDefaultPath),
+    textQuestion: 'TEMP -- TEMPES -- TEMPESTA -- ?',
     textOptionA: 'tempestades',
     textOptionB: 'temporal',
     textOptionC: 'tempestade',
@@ -152,8 +152,8 @@ const questionsDB: Question[] = [
   },
   {
     id: 14,
-    image: require(imageDefault),
-    textTitle:
+    image: require(imageDefaultPath),
+    textQuestion:
       'O professor transmitiu saber riquíssimo a várias gerações, realizando trabalho de grandes extensão: ',
     textOptionA: 'cultural',
     textOptionB: 'regional',
@@ -164,8 +164,8 @@ const questionsDB: Question[] = [
   },
   {
     id: 15,
-    image: require(imageDefault),
-    textTitle: 'Se João fosse Maria, lago seria...',
+    image: require(imageDefaultPath),
+    textQuestion: 'Se João fosse Maria, lago seria...',
     textOptionA: 'córrego',
     textOptionB: 'rio',
     textOptionC: 'mar',
@@ -175,8 +175,8 @@ const questionsDB: Question[] = [
   },
   {
     id: 16,
-    image: require(imageDefault),
-    textTitle: 'ATA -- GRAVATA -- AR\nEGO -- PREGO -- ?',
+    image: require(imageDefaultPath),
+    textQuestion: 'ATA -- GRAVATA -- AR\nEGO -- PREGO -- ?',
     textOptionA: 'AV',
     textOptionB: 'GO',
     textOptionC: 'GE',
@@ -186,8 +186,8 @@ const questionsDB: Question[] = [
   },
   {
     id: 17,
-    image: require(imageDefault),
-    textTitle: '5  2  9  3  7  --  9\n0  4  1  6  8  --  ?',
+    image: require(imageDefaultPath),
+    textQuestion: '5  2  9  3  7  --  9\n0  4  1  6  8  --  ?',
     textOptionA: '3',
     textOptionB: '1',
     textOptionC: '4',
@@ -198,7 +198,7 @@ const questionsDB: Question[] = [
   {
     id: 18,
     image: require('./images/18b.png'),
-    textTitle: 'Escolha a alternativa correta',
+    textQuestion: 'Escolha a alternativa correta',
     textOptionA: '8 / 3',
     textOptionB: '4 / 6',
     textOptionC: '8 / 4',
@@ -208,8 +208,8 @@ const questionsDB: Question[] = [
   },
   {
     id: 19,
-    image: require(imageDefault),
-    textTitle: 'Que se passa aqui?',
+    image: require(imageDefaultPath),
+    textQuestion: 'Que se passa aqui?',
     textOptionA: 'Rua estreita e curta (malar); pssp da face (beco);',
     textOptionB: 'Maior deserto (saara); mamífero desdentado (tatu);',
     textOptionC: 'Imperador romano (Nero); base da montanha (sopé);',
@@ -220,8 +220,8 @@ const questionsDB: Question[] = [
   },
   {
     id: 20,
-    image: require(imageDefault),
-    textTitle: 'ETNIV SONEM OCNIC',
+    image: require(imageDefaultPath),
+    textQuestion: 'ETNIV SONEM OCNIC',
     textOptionA: 'EZNO',
     textOptionB: 'EZNIUQ',
     textOptionC: 'ETES',
@@ -231,8 +231,8 @@ const questionsDB: Question[] = [
   },
   {
     id: 21,
-    image: require(imageDefault),
-    textTitle:
+    image: require(imageDefaultPath),
+    textQuestion:
       'Um passageiro sai, de avião, às 15 horas, do Rio com destino a Manaus, cuja viagem dura 3 horas. Por que, então, ele chegou lá às 17 horas e não às 18 horas?',
     textOptionA: 'Tempo chuvoso',
     textOptionB: 'Imperícia do piloto',
@@ -243,8 +243,8 @@ const questionsDB: Question[] = [
   },
   {
     id: 22,
-    image: require(imageDefault),
-    textTitle: 'DE CANA\nFRIO\nCHATO\nQUENTE',
+    image: require(imageDefaultPath),
+    textQuestion: 'DE CANA\nFRIO\nCHATO\nQUENTE',
     textOptionA: 'gomo',
     textOptionB: 'talo',
     textOptionC: 'pé',
@@ -254,8 +254,8 @@ const questionsDB: Question[] = [
   },
   {
     id: 23,
-    image: require(imageDefault),
-    textTitle: 'Quinhentos, igual a:',
+    image: require(imageDefaultPath),
+    textQuestion: 'Quinhentos, igual a:',
     textOptionA: '2 x 5 ao quadrado + 15 x 40',
     textOptionB: '2 ao quadrado x 5 ao quadrado + 50 x 4',
     textOptionC: '2 à quarta potência x 5 ao quadrado + 50 x 4',
@@ -266,7 +266,7 @@ const questionsDB: Question[] = [
   {
     id: 24,
     image: require('./images/24b.png'),
-    textTitle: 'Indique a opção correta',
+    textQuestion: 'Indique a opção correta',
     textOptionA: '7, 7, 7',
     textOptionB: '8, 7, 7',
     textOptionC: '8, 8, 8',
@@ -277,7 +277,7 @@ const questionsDB: Question[] = [
   {
     id: 25,
     image: require('./images/25a.png'),
-    textTitle: 'Qual a figura correta?',
+    textQuestion: 'Qual a figura correta?',
     textOptionA: 'Figura A',
     textOptionB: 'Figura B',
     textOptionC: 'Figura C',
@@ -287,8 +287,8 @@ const questionsDB: Question[] = [
   },
   {
     id: 26,
-    image: require(imageDefault),
-    textTitle:
+    image: require(imageDefaultPath),
+    textQuestion:
       'Quando se está num quarto escuro e se tem um fósforo, um fogareiro, um lampião, uma vela e um cigarro, o que se acende primeiro?',
     textOptionA: 'Fósforo',
     textOptionB: 'Fogareiro',

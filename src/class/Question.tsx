@@ -1,7 +1,7 @@
 export class Question {
   id: number;
   image: any;
-  textTitle: string;
+  textQuestion: string;
   textOptionA: string;
   textOptionB: string;
   textOptionC: string;
@@ -22,7 +22,7 @@ export class Question {
   ) {
     this.id = id;
     this.image = image;
-    this.textTitle = text;
+    this.textQuestion = text;
     this.textOptionA = textOptionA;
     this.textOptionB = textOptionB;
     this.textOptionC = textOptionC;
