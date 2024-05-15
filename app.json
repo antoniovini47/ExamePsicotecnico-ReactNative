@@ -1,4 +1,8 @@
 {
   "name": "ExamePsicotecnico",
-  "displayName": "ExamePsicotecnico"
+  "displayName": "ExamePsicotecnico",
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-9218769381944425~7120876774",
+    "ios_app_id": "ca-app-pub-xxxxxxxx~xxxxxxxx"
+  }
 }

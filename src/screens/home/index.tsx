@@ -10,11 +10,27 @@ import {
 } from 'react-native';
 import {RadioButton} from 'react-native-paper';
 import Slider from '@react-native-community/slider';
-//import Sound from 'react-native-sound';
+import mobileAds, {
+  BannerAd,
+  BannerAdSize,
+  TestIds,
+} from 'react-native-google-mobile-ads';
 
 import {styles} from './styles';
 import questionsDB from '../../database/QuestionsDB';
 import {Question} from '../../class/Question';
+
+let isAdBannerLoaded = false;
+
+const bannerAdId = __DEV__
+  ? TestIds.ADAPTIVE_BANNER
+  : 'ca-app-pub-9218769381944425/9573093376';
+
+mobileAds()
+  .initialize()
+  .then(adapterStatuses => {
+    console.log(`Banner Ad id: ${bannerAdId} `);
+  });
 
 var Sound = require('react-native-sound');
 Sound.setCategory('Playback');
@@ -23,13 +39,6 @@ var correctSound = new Sound('correct.mp3', Sound.MAIN_BUNDLE, error => {
     console.log('failed to load the sound', error);
     return;
   }
-  // loaded successfully
-  console.log(
-    'duration in seconds: ' +
-      correctSound.getDuration() +
-      'number of channels: ' +
-      correctSound.getNumberOfChannels(),
-  );
 });
 
 var incorrectSound = new Sound('incorrect.mp3', Sound.MAIN_BUNDLE, error => {
@@ -37,13 +46,6 @@ var incorrectSound = new Sound('incorrect.mp3', Sound.MAIN_BUNDLE, error => {
     console.log('failed to load the sound', error);
     return;
   }
-  // loaded successfully
-  console.log(
-    'duration in seconds: ' +
-      correctSound.getDuration() +
-      'number of channels: ' +
-      correctSound.getNumberOfChannels(),
-  );
 });
 
 const imageDefaultPath: string =
@@ -117,7 +119,7 @@ export function Home() {
     currentQuestion++;
     setTextTitle(`Questão ${currentQuestion}/${quantityQuestionsSelected}`);
     setOptionSelected('');
-    setOptionSelected('b'); //Debug only
+    //setOptionSelected('b'); //Debug only CBD - Remove
     setImagePath(sortedQuestions[currentQuestion].image);
     setTextQuestion(sortedQuestions[currentQuestion].textQuestion);
     setTextOptionA(sortedQuestions[currentQuestion].textOptionA);
@@ -331,10 +333,37 @@ export function Home() {
         </ScrollView>
       </View>
       <View style={styles.adBanner}>
-        <Text style={styles.textAdBanner}>
-          Carregando anúncios. Para remover anúncios clique no botão de
-          configurações.
-        </Text>
+        {/* CBD - Alterar ID Banner*/}
+        {!isAdBannerLoaded && (
+          <Text style={styles.textAdBanner}>
+            Carregando anúncios. Para remover anúncios clique no botão de
+            configurações.
+          </Text>
+        )}
+        <View style={{display: isAdBannerLoaded ? 'flex' : 'none'}}>
+          <BannerAd
+            unitId={bannerAdId}
+            size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+            onAdLoaded={() => {
+              console.log(
+                `isAdBannerLoaded ficou true, pelo loaded, result: ${isAdBannerLoaded}`,
+              );
+              isAdBannerLoaded = true;
+            }}
+            onAdFailedToLoad={() => {
+              console.log(
+                `isAdBannerLoaded ficou false, pelo failed, result: ${isAdBannerLoaded}`,
+              );
+              isAdBannerLoaded = false;
+            }}
+            onAdClosed={() => {
+              console.log(
+                `isAdBannerLoaded ficou false, pelo closed, result: ${isAdBannerLoaded}`,
+              );
+              isAdBannerLoaded = false;
+            }}
+          />
+        </View>
       </View>
 
       <View style={styles.footer}>

@@ -20,6 +20,8 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     flex: 1,
     backgroundColor: backgroundColor,
+    paddingTop: paddingDefault,
+    paddingBottom: paddingDefault,
   },
   header: {
     fontSize: fontSizeBig,
@@ -46,6 +48,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   footer: {
+    paddingTop: paddingDefault,
     paddingHorizontal: paddingDefault,
     flexDirection: 'row',
     justifyContent: 'space-between',
