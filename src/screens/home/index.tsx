@@ -109,15 +109,9 @@ export function Home() {
       return;
     }
 
-    if (appState === 'question') {
-      if (optionSelected == undefined || optionSelected == '') {
-        showToastSelectAOption();
-        return;
-      }
-
-      if (optionSelected == sortedQuestions[currentQuestion].correctOption) {
-        scoreCount++;
-      }
+    if (appState === 'pause') {
+      setAppState('question');
+      setTextButton('Responder');
 
       if (currentQuestion == quantityQuestionsSelected) {
         setImagePath(require(imageDefaultPath));
@@ -131,6 +125,23 @@ export function Home() {
       }
 
       mountNextQuestion();
+      return;
+    }
+
+    if (appState === 'question') {
+      if (optionSelected == undefined || optionSelected == '') {
+        showToastSelectAOption();
+        return;
+      }
+
+      if (optionSelected == sortedQuestions[currentQuestion].correctOption) {
+        scoreCount++;
+      }
+
+      //Pause before continuing
+      setTextButton('Continuar');
+      setAppState('pause');
+      return;
     }
 
     if (appState === 'start') {
@@ -143,7 +154,7 @@ export function Home() {
 
       loadQuestions();
       setAppState('question');
-      setTextButton('Próxima');
+      setTextButton('Responder');
       return;
     }
   };
@@ -179,7 +190,7 @@ export function Home() {
             </View>
           )}
           <View>
-            {appState === 'question' && (
+            {(appState === 'question' || appState == 'pause') && (
               <RadioButton.Group
                 onValueChange={newOptionSelected =>
                   setOptionSelected(newOptionSelected)
