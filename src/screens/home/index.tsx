@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {
   Image,
   ScrollView,
@@ -10,9 +10,43 @@ import {
 } from 'react-native';
 import {RadioButton} from 'react-native-paper';
 import Slider from '@react-native-community/slider';
+import mobileAds, {
+  BannerAd,
+  BannerAdSize,
+  TestIds,
+} from 'react-native-google-mobile-ads';
+
 import {styles} from './styles';
 import questionsDB from '../../database/QuestionsDB';
 import {Question} from '../../class/Question';
+
+let isAdBannerLoaded = false;
+
+const bannerAdId = __DEV__
+  ? TestIds.ADAPTIVE_BANNER
+  : 'ca-app-pub-9218769381944425/9573093376';
+
+mobileAds()
+  .initialize()
+  .then(adapterStatuses => {
+    console.log(`Banner Ad id: ${bannerAdId} `);
+  });
+
+var Sound = require('react-native-sound');
+Sound.setCategory('Playback');
+var correctSound = new Sound('correct.mp3', Sound.MAIN_BUNDLE, error => {
+  if (error) {
+    console.log('failed to load the sound', error);
+    return;
+  }
+});
+
+var incorrectSound = new Sound('incorrect.mp3', Sound.MAIN_BUNDLE, error => {
+  if (error) {
+    console.log('failed to load the sound', error);
+    return;
+  }
+});
 
 const imageDefaultPath: string =
   '../../../android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png';
@@ -29,12 +63,12 @@ const showToastSelectAOption = () => {
 
 let emptyQuestion: Question = {
   id: 0,
-  textQuestion: 'Questão nula',
-  textOptionA: 'Alternativa A',
-  textOptionB: 'Alternativa B',
-  textOptionC: 'Alternativa C',
-  textOptionD: 'Alternativa D',
-  textOptionE: 'Alternativa E',
+  textQuestion: 'Null Question',
+  textOptionA: 'Alt A',
+  textOptionB: 'Alt B',
+  textOptionC: 'Alt C',
+  textOptionD: 'Alt D',
+  textOptionE: 'Alt E',
   correctOption: 'a',
   image: require(imageDefaultPath),
 };
@@ -85,7 +119,7 @@ export function Home() {
     currentQuestion++;
     setTextTitle(`Questão ${currentQuestion}/${quantityQuestionsSelected}`);
     setOptionSelected('');
-    setOptionSelected('b'); //Debug only
+    //setOptionSelected('b'); //Debug only CBD - Remove
     setImagePath(sortedQuestions[currentQuestion].image);
     setTextQuestion(sortedQuestions[currentQuestion].textQuestion);
     setTextOptionA(sortedQuestions[currentQuestion].textOptionA);
@@ -109,15 +143,9 @@ export function Home() {
       return;
     }
 
-    if (appState === 'question') {
-      if (optionSelected == undefined || optionSelected == '') {
-        showToastSelectAOption();
-        return;
-      }
-
-      if (optionSelected == sortedQuestions[currentQuestion].correctOption) {
-        scoreCount++;
-      }
+    if (appState === 'paused') {
+      setAppState('question');
+      setTextButton('Responder');
 
       if (currentQuestion == quantityQuestionsSelected) {
         setImagePath(require(imageDefaultPath));
@@ -131,6 +159,25 @@ export function Home() {
       }
 
       mountNextQuestion();
+      return;
+    }
+
+    if (appState === 'question') {
+      if (optionSelected == undefined || optionSelected == '') {
+        showToastSelectAOption();
+        return;
+      }
+
+      if (optionSelected == sortedQuestions[currentQuestion].correctOption) {
+        correctSound.play();
+        scoreCount++;
+      } else {
+        incorrectSound.play();
+      }
+
+      setTextButton('Continuar');
+      setAppState('paused');
+      return;
     }
 
     if (appState === 'start') {
@@ -143,7 +190,7 @@ export function Home() {
 
       loadQuestions();
       setAppState('question');
-      setTextButton('Próxima');
+      setTextButton('Responder');
       return;
     }
   };
@@ -179,7 +226,7 @@ export function Home() {
             </View>
           )}
           <View>
-            {appState === 'question' && (
+            {(appState === 'question' || appState == 'paused') && (
               <RadioButton.Group
                 onValueChange={newOptionSelected =>
                   setOptionSelected(newOptionSelected)
@@ -187,36 +234,96 @@ export function Home() {
                 value={optionSelected}>
                 <TouchableWithoutFeedback
                   onPress={() => setOptionSelected('a')}>
-                  <View style={styles.radioButton}>
-                    <RadioButton value="a" />
+                  <View
+                    style={[
+                      styles.radioButton,
+                      {
+                        backgroundColor:
+                          appState === 'paused'
+                            ? sortedQuestions[currentQuestion].correctOption ===
+                              'a'
+                              ? 'green'
+                              : 'red'
+                            : 'black',
+                      },
+                    ]}>
+                    <RadioButton value="a" disabled={appState === 'paused'} />
                     <Text style={styles.textOption}>{textOptionA}</Text>
                   </View>
                 </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback
                   onPress={() => setOptionSelected('b')}>
-                  <View style={styles.radioButton}>
-                    <RadioButton value="b" />
+                  <View
+                    style={[
+                      styles.radioButton,
+                      {
+                        backgroundColor:
+                          appState === 'paused'
+                            ? sortedQuestions[currentQuestion].correctOption ===
+                              'b'
+                              ? 'green'
+                              : 'red'
+                            : 'black',
+                      },
+                    ]}>
+                    <RadioButton value="b" disabled={appState === 'paused'} />
                     <Text style={styles.textOption}>{textOptionB}</Text>
                   </View>
                 </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback
                   onPress={() => setOptionSelected('c')}>
-                  <View style={styles.radioButton}>
-                    <RadioButton value="c" />
+                  <View
+                    style={[
+                      styles.radioButton,
+                      {
+                        backgroundColor:
+                          appState === 'paused'
+                            ? sortedQuestions[currentQuestion].correctOption ===
+                              'c'
+                              ? 'green'
+                              : 'red'
+                            : 'black',
+                      },
+                    ]}>
+                    <RadioButton value="c" disabled={appState === 'paused'} />
                     <Text style={styles.textOption}>{textOptionC}</Text>
                   </View>
                 </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback
                   onPress={() => setOptionSelected('d')}>
-                  <View style={styles.radioButton}>
-                    <RadioButton value="d" />
+                  <View
+                    style={[
+                      styles.radioButton,
+                      {
+                        backgroundColor:
+                          appState === 'paused'
+                            ? sortedQuestions[currentQuestion].correctOption ===
+                              'd'
+                              ? 'green'
+                              : 'red'
+                            : 'black',
+                      },
+                    ]}>
+                    <RadioButton value="d" disabled={appState === 'paused'} />
                     <Text style={styles.textOption}>{textOptionD}</Text>
                   </View>
                 </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback
                   onPress={() => setOptionSelected('e')}>
-                  <View style={styles.radioButton}>
-                    <RadioButton value="e" />
+                  <View
+                    style={[
+                      styles.radioButton,
+                      {
+                        backgroundColor:
+                          appState === 'paused'
+                            ? sortedQuestions[currentQuestion].correctOption ===
+                              'e'
+                              ? 'green'
+                              : 'red'
+                            : 'black',
+                      },
+                    ]}>
+                    <RadioButton value="e" disabled={appState === 'paused'} />
                     <Text style={styles.textOption}>{textOptionE}</Text>
                   </View>
                 </TouchableWithoutFeedback>
@@ -226,10 +333,37 @@ export function Home() {
         </ScrollView>
       </View>
       <View style={styles.adBanner}>
-        <Text style={styles.textAdBanner}>
-          Carregando anúncios. Para remover anúncios clique no botão de
-          configurações.
-        </Text>
+        {/* CBD - Alterar ID Banner*/}
+        {!isAdBannerLoaded && (
+          <Text style={styles.textAdBanner}>
+            Carregando anúncios. Para remover anúncios clique no botão de
+            configurações.
+          </Text>
+        )}
+        <View style={{display: isAdBannerLoaded ? 'flex' : 'none'}}>
+          <BannerAd
+            unitId={bannerAdId}
+            size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+            onAdLoaded={() => {
+              console.log(
+                `isAdBannerLoaded ficou true, pelo loaded, result: ${isAdBannerLoaded}`,
+              );
+              isAdBannerLoaded = true;
+            }}
+            onAdFailedToLoad={() => {
+              console.log(
+                `isAdBannerLoaded ficou false, pelo failed, result: ${isAdBannerLoaded}`,
+              );
+              isAdBannerLoaded = false;
+            }}
+            onAdClosed={() => {
+              console.log(
+                `isAdBannerLoaded ficou false, pelo closed, result: ${isAdBannerLoaded}`,
+              );
+              isAdBannerLoaded = false;
+            }}
+          />
+        </View>
       </View>
 
       <View style={styles.footer}>
