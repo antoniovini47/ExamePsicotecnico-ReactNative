@@ -79,3 +79,6 @@ android/gradle.properties
 /src/database/images
 /examples
 /.expo
+.vscode/
+*.log
+dist/
