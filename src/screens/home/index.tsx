@@ -1,12 +1,12 @@
 import React, {useEffect} from 'react';
 import {
   Image,
-  SafeAreaView,
   ScrollView,
   Text,
   TouchableOpacity,
   View,
   TouchableWithoutFeedback,
+  ToastAndroid,
 } from 'react-native';
 import {RadioButton} from 'react-native-paper';
 import Slider from '@react-native-community/slider';
@@ -17,35 +17,42 @@ import {Question} from '../../class/Question';
 const imageDefaultPath: string =
   '../../../android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png';
 
-const minimunQuantityQuestions = 3;
+const minimunQuantityQuestions = 3; //CBD - Channge Before Deploy
 
+const showToastSelectAOption = () => {
+  ToastAndroid.showWithGravity(
+    'Por favor, selecione uma opção',
+    ToastAndroid.LONG,
+    ToastAndroid.CENTER,
+  );
+};
+
+let emptyQuestion: Question = {
+  id: 0,
+  textQuestion: 'Questão nula',
+  textOptionA: 'Alternativa A',
+  textOptionB: 'Alternativa B',
+  textOptionC: 'Alternativa C',
+  textOptionD: 'Alternativa D',
+  textOptionE: 'Alternativa E',
+  correctOption: 'a',
+  image: require(imageDefaultPath),
+};
 let currentQuestion = 0,
-  sortedQuestions: Question[] = [],
-  score = 0;
+  sortedQuestions: Question[] = [emptyQuestion],
+  scoreCount = 0;
 
-function sortingQuestions(quantity: number) {
-  const allQuestions = questionsDB;
-  const questionsSelected = [];
-  /*let sortedNumber = 0;
-  const idQuestionsSelected: number[] = [];
-
-  /*function sortAndCheckDuplicatedID(idArray: number[]): number {
-    let sortedNumber = Math.floor(Math.random() * allQuestions.length);
-    if (idArray.includes(sortedNumber)) {
-      console.log('ID duplicado, sorteando novamente');
-      return sortAndCheckDuplicatedID(idArray);
-    }
-    console.log(`ID sorteado e adicionado ao array: ${sortedNumber}`);
-    idArray.push(sortedNumber);
-    return sortedNumber;
-  }*/
+function sortingQuestions(quantity: number): Question[] {
+  const allQuestions = [...questionsDB];
+  const questionsSelected: Question[] = [];
 
   for (let i = 1; i <= quantity; i++) {
+    let sortedNumber = Math.floor(Math.random() * allQuestions.length);
     questionsSelected.push({
-      ...allQuestions[Math.floor(Math.random() * allQuestions.length)],
+      ...allQuestions[sortedNumber],
     });
+    allQuestions.splice(sortedNumber, 1);
   }
-
   return questionsSelected;
 }
 
@@ -72,12 +79,13 @@ export function Home() {
     console.log('-----------Log Tela atual-----------');
     console.log(`Estado atual: ${appState.toString()}`);
     console.log(`Questão atual: ${currentQuestion}`);
-  }, [appState, currentQuestion]);
+  }, [currentQuestion]);
 
   function mountNextQuestion() {
     currentQuestion++;
     setTextTitle(`Questão ${currentQuestion}/${quantityQuestionsSelected}`);
-    setOptionSelected('b');
+    setOptionSelected('');
+    setOptionSelected('b'); //Debug only
     setImagePath(sortedQuestions[currentQuestion].image);
     setTextQuestion(sortedQuestions[currentQuestion].textQuestion);
     setTextOptionA(sortedQuestions[currentQuestion].textOptionA);
@@ -88,44 +96,6 @@ export function Home() {
   }
 
   const handleMainButtonClicked = () => {
-    if (appState === 'start') {
-      async function loadQuestions() {
-        sortedQuestions = sortingQuestions(quantityQuestionsSelected + 1);
-        mountNextQuestion();
-      }
-      loadQuestions();
-      setAppState('question');
-      setTextButton('Próxima');
-      return;
-    }
-
-    if (appState === 'question') {
-      console.log(`Opção selecionada: ${optionSelected}`);
-      if (optionSelected === undefined || optionSelected === '') {
-        console.log('Selecione uma opção');
-        return;
-      }
-      if (optionSelected === sortedQuestions[currentQuestion].correctOption) {
-        score++;
-        console.log(`Resposta correta, pontuação: ${score}`);
-      } else {
-        console.log(`Resposta incorreta, pontuação: ${score}`);
-      }
-      if (currentQuestion === quantityQuestionsSelected) {
-        setImagePath(require(imageDefaultPath));
-        setAppState('result');
-        setTextButton('Repetir');
-        setTextTitle('Resultado');
-        setTextQuestion(
-          `Sua pontuação foi: ${score}/${quantityQuestionsSelected}`,
-        );
-        return;
-      } else {
-        mountNextQuestion();
-      }
-      return;
-    }
-
     if (appState === 'result') {
       setAppState('start');
       setTextButton('Iniciar');
@@ -133,8 +103,47 @@ export function Home() {
       setTextQuestion(
         'Selecione a quantidade de questões e clique em iniciar para começar o exame.',
       );
+      sortedQuestions = [emptyQuestion];
       currentQuestion = 0;
-      score = 0;
+      scoreCount = 0;
+      return;
+    }
+
+    if (appState === 'question') {
+      if (optionSelected == undefined || optionSelected == '') {
+        showToastSelectAOption();
+        return;
+      }
+
+      if (optionSelected == sortedQuestions[currentQuestion].correctOption) {
+        scoreCount++;
+      }
+
+      if (currentQuestion == quantityQuestionsSelected) {
+        setImagePath(require(imageDefaultPath));
+        setAppState('result');
+        setTextButton('Repetir');
+        setTextTitle('Resultado');
+        setTextQuestion(
+          `Sua pontuação foi: ${scoreCount}/${quantityQuestionsSelected}`,
+        );
+        return;
+      }
+
+      mountNextQuestion();
+    }
+
+    if (appState === 'start') {
+      async function loadQuestions() {
+        sortedQuestions = sortedQuestions.concat(
+          sortingQuestions(quantityQuestionsSelected),
+        );
+        mountNextQuestion();
+      }
+
+      loadQuestions();
+      setAppState('question');
+      setTextButton('Próxima');
       return;
     }
   };
