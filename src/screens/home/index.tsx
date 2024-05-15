@@ -29,7 +29,7 @@ const bannerAdId = __DEV__
 mobileAds()
   .initialize()
   .then(adapterStatuses => {
-    console.log(`Banner Ad id: ${bannerAdId} `);
+    console.log(`Ads Initializeds - Banner Ad id: ${bannerAdId} `);
   });
 
 var Sound = require('react-native-sound');
