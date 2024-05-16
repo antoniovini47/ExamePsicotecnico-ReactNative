@@ -84,7 +84,7 @@ var incorrectSound = new Sound('incorrect.mp3', Sound.MAIN_BUNDLE, error => {
 const imageDefaultPath: string =
   '../../../android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png';
 
-const minimunQuantityQuestions = __DEV__ ? 3 : 15;
+const minimunQuantityQuestions = __DEV__ ? 3 : questionsDB.length / 2;
 
 const showToast = (text: string) => {
   ToastAndroid.showWithGravity(text, ToastAndroid.LONG, ToastAndroid.CENTER);
@@ -297,6 +297,7 @@ export function Home() {
                 style={styles.slider}
                 minimumValue={minimunQuantityQuestions}
                 maximumValue={questionsDB.length}
+                value={(questionsDB.length * 4) / 5}
                 step={1}
                 onValueChange={value => setQuantityQuestionsSelected(value)}
               />

@@ -10,7 +10,7 @@ const fontSizeSmall = 18;
 const backgroundColor = 'black';
 const textColor = 'white';
 
-const adHeight = 50; //Alterar com base na documentação AdMob
+const adHeight = 50;
 const buttonHeight = 50;
 const screenWidth = Dimensions.get('screen').width;
 
@@ -67,7 +67,7 @@ export const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   slider: {
-    backgroundColor: textColor,
+    backgroundColor: backgroundColor,
     paddingTop: paddingDefault,
     height: buttonHeight,
   },
@@ -122,6 +122,7 @@ export const styles = StyleSheet.create({
     elevation: 5,
   },
   modalText: {
+    color: backgroundColor,
     marginBottom: 15,
     textAlign: 'center',
   },

@@ -79,8 +79,8 @@ android {
         applicationId "com.rotech.examepsicotecnico"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 16
-        versionName "2.0 - Alpha 1.16 - 2024-05-15-20-24"
+        versionCode 19
+        versionName "2.0 - 2024-05-16-12-38"
     }
     signingConfigs {
         debug {
