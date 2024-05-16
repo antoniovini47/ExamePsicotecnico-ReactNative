@@ -10,7 +10,7 @@ const fontSizeSmall = 18;
 const backgroundColor = 'black';
 const textColor = 'white';
 
-const adHeight = 50; //Alterar com base na documentação AdMob
+const adHeight = 50;
 const buttonHeight = 50;
 const screenWidth = Dimensions.get('screen').width;
 
@@ -67,7 +67,7 @@ export const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   slider: {
-    backgroundColor: textColor,
+    backgroundColor: backgroundColor,
     paddingTop: paddingDefault,
     height: buttonHeight,
   },
@@ -97,5 +97,40 @@ export const styles = StyleSheet.create({
     color: backgroundColor,
     fontSize: fontSizeBig,
     textAlign: 'center',
+  },
+
+  //Modal Styles
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: textColor,
+    borderColor: backgroundColor,
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalText: {
+    color: backgroundColor,
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+  modalButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: backgroundColor,
+    color: textColor,
+    padding: paddingDefault,
   },
 });
