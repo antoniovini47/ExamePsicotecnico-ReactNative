@@ -51,7 +51,7 @@ var incorrectSound = new Sound('incorrect.mp3', Sound.MAIN_BUNDLE, error => {
 const imageDefaultPath: string =
   '../../../android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png';
 
-const minimunQuantityQuestions = 3; //CBD - Channge Before Deploy
+const minimunQuantityQuestions = __DEV__ ? 3 : 15;
 
 const showToastSelectAOption = () => {
   ToastAndroid.showWithGravity(
@@ -333,7 +333,6 @@ export function Home() {
         </ScrollView>
       </View>
       <View style={styles.adBanner}>
-        {/* CBD - Alterar ID Banner*/}
         {!isAdBannerLoaded && (
           <Text style={styles.textAdBanner}>
             Carregando anúncios. Para remover anúncios clique no botão de
