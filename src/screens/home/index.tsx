@@ -7,30 +7,63 @@ import {
   View,
   TouchableWithoutFeedback,
   ToastAndroid,
+  Modal,
 } from 'react-native';
 import {RadioButton} from 'react-native-paper';
 import Slider from '@react-native-community/slider';
 import mobileAds, {
   BannerAd,
   BannerAdSize,
+  InterstitialAd,
+  AdEventType,
   TestIds,
+  RewardedAd,
+  RewardedAdEventType,
 } from 'react-native-google-mobile-ads';
 
 import {styles} from './styles';
 import questionsDB from '../../database/QuestionsDB';
 import {Question} from '../../class/Question';
 
-let isAdBannerLoaded = false;
-
 const bannerAdId = __DEV__
   ? TestIds.ADAPTIVE_BANNER
   : 'ca-app-pub-9218769381944425/9573093376';
+
+const interstitialAdId = __DEV__
+  ? TestIds.INTERSTITIAL
+  : 'ca-app-pub-9218769381944425/2459129925';
+
+const rewardedAdId = __DEV__
+  ? TestIds.REWARDED
+  : 'ca-app-pub-9218769381944425/1312959273';
+
+const keywordsAds = {
+  keywords: [
+    'veiculos',
+    'habilitacao',
+    'transito',
+    'detran',
+    'psicotecnico',
+    'exame',
+  ],
+};
+
+let showNoMoreAds = false;
+let isAdBannerLoaded = false;
+let interstitialAdLoadedEachQuestionFactor = __DEV__ ? 2 : 5;
 
 mobileAds()
   .initialize()
   .then(adapterStatuses => {
     console.log(`Ads Initializeds - Banner Ad id: ${bannerAdId} `);
   });
+
+const interstitialAd = InterstitialAd.createForAdRequest(
+  interstitialAdId,
+  keywordsAds,
+);
+
+const rewardedAd = RewardedAd.createForAdRequest(rewardedAdId, keywordsAds);
 
 var Sound = require('react-native-sound');
 Sound.setCategory('Playback');
@@ -53,12 +86,8 @@ const imageDefaultPath: string =
 
 const minimunQuantityQuestions = __DEV__ ? 3 : 15;
 
-const showToastSelectAOption = () => {
-  ToastAndroid.showWithGravity(
-    'Por favor, selecione uma opção',
-    ToastAndroid.LONG,
-    ToastAndroid.CENTER,
-  );
+const showToast = (text: string) => {
+  ToastAndroid.showWithGravity(text, ToastAndroid.LONG, ToastAndroid.CENTER);
 };
 
 let emptyQuestion: Question = {
@@ -91,6 +120,51 @@ function sortingQuestions(quantity: number): Question[] {
 }
 
 export function Home() {
+  const [isInterstitialAdLoaded, setIsInterstitialAdLoaded] =
+    React.useState(false);
+  useEffect(() => {
+    const unsubscribe = interstitialAd.addAdEventListener(
+      AdEventType.LOADED,
+      () => {
+        setIsInterstitialAdLoaded(true);
+        __DEV__ ? showToast('Anúncio carregado') : null;
+      },
+    );
+
+    showNoMoreAds;
+    interstitialAd.load();
+    return unsubscribe;
+  }, []);
+
+  const [isRewardedAdLoaded, setIsRewardedAdLoaded] = React.useState(false);
+  useEffect(() => {
+    const unsubscribeLoaded = rewardedAd.addAdEventListener(
+      RewardedAdEventType.LOADED,
+      () => {
+        setIsRewardedAdLoaded(true);
+      },
+    );
+    const unsubscribeEarned = rewardedAd.addAdEventListener(
+      RewardedAdEventType.EARNED_REWARD,
+      reward => {
+        showNoMoreAds = true;
+        console.log(
+          'User earned reward of ',
+          reward,
+          '. showNoMoreAds: ',
+          showNoMoreAds,
+        );
+      },
+    );
+
+    rewardedAd.load();
+
+    return () => {
+      unsubscribeLoaded();
+      unsubscribeEarned();
+    };
+  }, []);
+
   const [appState, setAppState] = React.useState('start');
   const [quantityQuestionsSelected, setQuantityQuestionsSelected] =
     React.useState(minimunQuantityQuestions);
@@ -108,6 +182,7 @@ export function Home() {
   const [textOptionD, setTextOptionD] = React.useState('Alternativa D');
   const [textOptionE, setTextOptionE] = React.useState('Alternativa E');
   const [optionSelected, setOptionSelected] = React.useState('');
+  const [isModalConfigsVisible, setModalConfigsVisible] = React.useState(false);
 
   useEffect(() => {
     console.log('-----------Log Tela atual-----------');
@@ -118,8 +193,7 @@ export function Home() {
   function mountNextQuestion() {
     currentQuestion++;
     setTextTitle(`Questão ${currentQuestion}/${quantityQuestionsSelected}`);
-    setOptionSelected('');
-    //setOptionSelected('b'); //Debug only CBD - Remove
+    setOptionSelected(__DEV__ ? 'b' : '');
     setImagePath(sortedQuestions[currentQuestion].image);
     setTextQuestion(sortedQuestions[currentQuestion].textQuestion);
     setTextOptionA(sortedQuestions[currentQuestion].textOptionA);
@@ -127,6 +201,17 @@ export function Home() {
     setTextOptionC(sortedQuestions[currentQuestion].textOptionC);
     setTextOptionD(sortedQuestions[currentQuestion].textOptionD);
     setTextOptionE(sortedQuestions[currentQuestion].textOptionE);
+    if (
+      currentQuestion % interstitialAdLoadedEachQuestionFactor == 0 &&
+      isInterstitialAdLoaded &&
+      !showNoMoreAds
+    ) {
+      interstitialAd.show();
+      interstitialAd.addAdEventListener(AdEventType.CLOSED, () => {
+        setIsInterstitialAdLoaded(false);
+        interstitialAd.load();
+      });
+    }
   }
 
   const handleMainButtonClicked = () => {
@@ -164,7 +249,7 @@ export function Home() {
 
     if (appState === 'question') {
       if (optionSelected == undefined || optionSelected == '') {
-        showToastSelectAOption();
+        showToast('Por favor, selecione uma opção');
         return;
       }
 
@@ -193,10 +278,6 @@ export function Home() {
       setTextButton('Responder');
       return;
     }
-  };
-
-  const handleConfigsButtonClicked = () => {
-    console.log('Button configs clicked');
   };
 
   return (
@@ -367,7 +448,7 @@ export function Home() {
 
       <View style={styles.footer}>
         <TouchableOpacity
-          onPress={handleConfigsButtonClicked}
+          onPress={() => setModalConfigsVisible(!isModalConfigsVisible)}
           style={styles.mainButton}>
           <Image
             style={styles.imageButtonConfig}
@@ -380,6 +461,56 @@ export function Home() {
           <Text style={styles.textButton}>{textButton}</Text>
         </TouchableOpacity>
       </View>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isModalConfigsVisible}
+        onRequestClose={() => {
+          setModalConfigsVisible(!isModalConfigsVisible);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>SOBRE</Text>
+            <Text style={styles.modalText}>
+              Simulado para prática do Teste psicotécnico comumente aplicado na
+              avaliação para obtenção de Carteira de Habilitação.
+            </Text>
+            <Text style={styles.modalText}>
+              Você pode nos enviar o feedback e deixar sua avaliação geral sobre
+              o app na própria play store.
+            </Text>
+            <Text style={styles.modalText}>
+              Para remoção dos anúncios que aparecem em tela inteira, você pode
+              assistir a um único anúncio clicando em "Remover anúncios" abaixo.
+              Após isso, serão desabilitados os demais anúncios.
+            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}>
+              <TouchableOpacity
+                style={[styles.modalButton, {marginRight: 50}]}
+                onPress={() => setModalConfigsVisible(!isModalConfigsVisible)}>
+                <Text style={{color: 'white'}}>Fechar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.modalButton,
+                  {display: !showNoMoreAds ? 'flex' : 'none'},
+                ]}
+                onPress={() =>
+                  isRewardedAdLoaded
+                    ? rewardedAd.show()
+                    : showToast('Falha ao carregar anúncio.')
+                }>
+                <Text style={{color: 'white'}}>Remover Anúncios</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
